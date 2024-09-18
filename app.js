@@ -1,39 +1,50 @@
-// Ingresar tu clave API de API-FOOTBALL
-const apiKey = '0f4d6922f39a1e14cf0b8578d7d2fd93';
+// Reemplaza con tu clave API
+const apiKey = '28b8a2f79509a7032d2528bdc52442c2';
 
+// Función para buscar equipos de una liga específica
 async function buscarEquipos(liga) {
     const url = `https://v3.football.api-sports.io/teams?league=${liga}&season=2024`;
-    
-    const response = await fetch(url, {
-        headers: {
-            'x-apisports-key': apiKey
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'x-apisports-key': apiKey
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.statusText}`);
         }
-    });
 
-    const data = await response.json();
-
-    // Mostrar la lista de equipos
-    console.log(data.response);
-    return data.response;
+        const data = await response.json();
+        return data.response;
+    } catch (error) {
+        console.error('Error al buscar equipos:', error);
+        alert('Hubo un problema al obtener los datos de los equipos.');
+    }
 }
 
-function generarPronostico() {
-    const equipo1 = document.getElementById("equipo1").value;
-    const equipo2 = document.getElementById("equipo2").value;
-
-    if (!equipo1 || !equipo2) {
-        alert("Por favor ingresa los nombres de ambos equipos.");
+// Función para llenar los selectores de equipos
+async function llenarEquipos() {
+    const equipos = await buscarEquipos(39); // Premier League (Inglaterra)
+    
+    if (equipos.length === 0) {
+        alert("No se encontraron equipos.");
         return;
     }
 
-    const probabilidadEquipo1 = Math.random();
-    const probabilidadEquipo2 = 1 - probabilidadEquipo1;
+    equipos.forEach(equipo => {
+        const option1 = document.createElement('option');
+        option1.value = equipo.team.name;
+        option1.text = equipo.team.name;
 
-    let ganador = probabilidadEquipo1 > probabilidadEquipo2 ? equipo1 : equipo2;
+        const option2 = option1.cloneNode(true); // Para el segundo select
 
-    const resultado = `${equipo1} tiene un ${Math.round(probabilidadEquipo1 * 100)}% de ganar. ${equipo2} tiene un ${Math.round(probabilidadEquipo2 * 100)}% de ganar. Ganador probable: ${ganador}.`;
-    document.getElementById("resultado").innerText = resultado;
+        document.getElementById('equipo1').appendChild(option1);
+        document.getElementById('equipo2').appendChild(option2);
+    });
 }
 
-// Llamar a la función de buscar equipos al cargar la página o cuando sea necesario
-buscarEquipos(39); // Ejemplo: liga 39 corresponde a la Premier League
+// Llenar los selectores de equipos al cargar la página
+llenarEquipos();

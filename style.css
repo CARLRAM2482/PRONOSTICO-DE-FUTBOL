@@ -1,28 +1,23 @@
 body {
     font-family: Arial, sans-serif;
+}
+
+h1 {
     text-align: center;
-    margin: 50px;
 }
 
-input, select {
-    margin: 10px;
-    padding: 5px;
+#resultados {
+    margin: 20px;
 }
 
-button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
+div {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
-button:hover {
-    background-color: #45a049;
-}
-
-#resultado {
-    margin-top: 20px;
-    font-size: 18px;
-    font-weight: bold;
+hr {
+    border: 0;
+    border-top: 1px solid #ddd;
 }
